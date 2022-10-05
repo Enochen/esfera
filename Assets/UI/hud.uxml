@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/hud.uss?fileID=7433441132597879392&amp;guid=2d02946496e538848a6313e05dfb7a74&amp;type=3#hud" />
+    <ui:VisualElement name="root">
+        <ui:VisualElement name="bottom-bar">
+            <ui:GroupBox name="bottom-box">
+                <ui:GroupBox name="level-box">
+                    <ui:Label text="Lv. 1" display-tooltip-when-elided="true" name="level-label" />
+                </ui:GroupBox>
+                <ui:GroupBox name="stats-box" style="background-color: rgba(0, 0, 0, 0.35); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
+                    <ui:ProgressBar name="hp-bar" title="0/0" />
+                </ui:GroupBox>
+            </ui:GroupBox>
+        </ui:VisualElement>
+        <ui:VisualElement name="exp-bar" style="height: 1%;" />
+    </ui:VisualElement>
+</ui:UXML>
