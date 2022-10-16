@@ -13,8 +13,8 @@ public class MonsterSkills : EntitySkills {
           new SkillMeta {
             animTag = "Skill0",
             state = AttackState.SKILL_0,
-            source = gameObject,
           },
+          source: gameObject,
           cooldown: 2
         ),
     };

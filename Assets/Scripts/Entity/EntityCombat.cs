@@ -1,10 +1,12 @@
 using System;
+using System.Threading;
 using UnityEngine;
 
 public class EntityCombat : MonoBehaviour {
+  public AudioSource hitSound;
   [Range(0, 1)] public float stance = 0;
   public int hitstunLength = 600;
-  [SerializeField] private bool initWithSpawnAnim = true;
+  public CancellationTokenSource hitstunExtender = new();
   protected Animator animator;
   protected Rigidbody2D rb;
   protected EntityController entity;
@@ -17,32 +19,19 @@ public class EntityCombat : MonoBehaviour {
     hp = GetComponent<HPController>();
 
     hp.HitEvent += OnHit;
-    hp.DeathEvent += () => animator.SetTrigger("getKilled");
-
-    foreach (var behavior in animator.GetBehaviours<HandleOnTransition>()) {
-      behavior.OnStateEnterEvent += (state) => {
-        if (state.IsTag("Die")) OnDeathAnimBegin();
-        if (state.IsTag("Spawn")) OnSpawnAnimBegin();
-      };
-      behavior.OnStateExitEvent += (state) => {
-        if (state.IsTag("Die")) OnDeathAnimEnd();
-        if (state.IsTag("Spawn")) OnSpawnAnimEnd();
-      };
-    }
-
-    if (initWithSpawnAnim) {
-      Spawn();
-    } else {
-      OnSpawnAnimEnd();
-    }
   }
 
   protected virtual void OnHit(GameObject origin, Vector2 knockback) {
+    if (hitSound != null) {
+      hitSound.Play();
+    }
     if (stance < 1) {
-      if (!entity.hitstunned) {
-        entity.hitstunned = true;
-        Util.ExecuteAfterTime(() => entity.hitstunned = false, hitstunLength);
-      }
+      entity.hitstunned = true;
+      hitstunExtender.Cancel();
+      hitstunExtender = new();
+      _ = Util.ExecuteAfterTime(() => entity.hitstunned = false,
+                             hitstunLength,
+                             cancellationToken: hitstunExtender.Token);
       animator.SetTrigger("getHit");
       var knockbackEffect = 1 - stance;
       var direction = new Vector2(Math.Sign(transform.position.x - origin.transform.position.x), 1);
@@ -50,24 +39,4 @@ public class EntityCombat : MonoBehaviour {
       rb.AddForce(Util.HadamardProduct(knockback, direction) * knockbackEffect, ForceMode2D.Impulse);
     }
   }
-
-  public void Spawn() {
-    animator.SetTrigger("getSpawned");
-  }
-
-  protected virtual void OnSpawnAnimBegin() {
-    entity.isDead = true;
-    rb.velocity = Vector2.zero;
-  }
-
-  protected virtual void OnSpawnAnimEnd() {
-    entity.isDead = false;
-  }
-
-  protected virtual void OnDeathAnimBegin() {
-    entity.isDead = true;
-    rb.velocity = Vector2.zero;
-  }
-
-  protected virtual void OnDeathAnimEnd() { }
 }

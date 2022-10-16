@@ -9,26 +9,29 @@ public class HPController : MonoBehaviour {
   public event Action MaxHPChangeEvent;
   public event Action DeathEvent;
   public event Action<GameObject, Vector2> HitEvent;
+  public event Action HealEvent;
   public bool isInvincible = false;
+  public bool IsDead => HP == 0;
 
-  public bool GetHit(GameObject source, Vector2 knockbackForce, int damage, int lines = 1, bool respectInvincibility = true) {
-    if (isInvincible && respectInvincibility || HP == 0) return false;
-    HP = Math.Max(0, HP - lines * damage);
-    DeathCheck();
+  public bool GetHit(GameObject source, Vector2 knockbackForce, int damage, int lines = 1, bool isTrue = false) {
+    if ((isInvincible && !isTrue) || IsDead) return false;
+    HP -= lines * damage;
     HitEvent?.Invoke(source, knockbackForce);
     return true;
   }
 
-  private void DeathCheck() {
-    if (HP > 0) return;
-    DeathEvent?.Invoke();
+  public void Heal(int amount, bool revive = false) {
+    if (IsDead && !revive) return;
+    HP += amount;
+    HealEvent?.Invoke();
   }
 
   public int HP {
     get => hp;
     set {
-      hp = value;
+      hp = Math.Clamp(value, 0, MaxHP);
       HPChangeEvent?.Invoke();
+      if (IsDead) DeathEvent?.Invoke();
     }
   }
 

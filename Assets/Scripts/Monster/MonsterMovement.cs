@@ -1,11 +1,9 @@
 using System;
-using UnityEngine;
+using System.Collections.Generic;
 using static EntityController;
 
 public class MonsterMovement : EntityMovement {
-  private Vector2 _velocity;
-
-  public Vector2 Velocity { get => _velocity; set => _velocity = value; }
+  public event Action MovementEvent;
 
   protected override void UpdateAnimator() {
     animator.SetBool("isGrounded", IsGrounded);
@@ -16,10 +14,10 @@ public class MonsterMovement : EntityMovement {
   }
 
   protected override void UpdateMovement() {
-    rb.velocity = Velocity;
-    if (Velocity.x < -0.01) {
+    MovementEvent?.Invoke();
+    if (rb.velocity.x < -0.01) {
       entity.facing = FacingDirection.LEFT;
-    } else if (Velocity.x > 0.01) {
+    } else if (rb.velocity.x > 0.01) {
       entity.facing = FacingDirection.RIGHT;
     }
 

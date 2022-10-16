@@ -1,11 +1,8 @@
-using System;
 using System.Threading;
 using UnityEngine;
-using static EntityController;
 
 public class PlayerCombat : EntityCombat {
   public int immunityLength = 1000;
-  public Vector3 spawnPoint;
   SpriteRenderer spriteRenderer;
   PlayerMovement movement;
 
@@ -22,39 +19,12 @@ public class PlayerCombat : EntityCombat {
     }
     CancellationTokenSource source = new();
     hp.isInvincible = true;
-    Util.ExecuteEveryTime(FlashSprite, 100, source.Token);
-    Util.ExecuteAfterTime(() => {
+    _ = Util.ExecuteEveryTime(FlashSprite, 100, source.Token);
+    _ = Util.ExecuteAfterTime(() => {
       source.Cancel();
       SetSpriteAlpha(1);
       hp.isInvincible = false;
     }, immunityLength);
-  }
-
-  protected override void OnSpawnAnimBegin() {
-    base.OnSpawnAnimBegin();
-    entity.SetAnimLocked(true);
-    rb.constraints = RigidbodyConstraints2D.FreezeAll;
-    movement.ResetAirborneVelX();
-  }
-
-  protected override void OnSpawnAnimEnd() {
-    base.OnSpawnAnimEnd();
-    entity.SetAnimLocked(false);
-    rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-  }
-
-  protected override void OnDeathAnimBegin() {
-    base.OnDeathAnimBegin();
-    entity.SetAnimLocked(true);
-    hp.HP = hp.MaxHP;
-  }
-
-  protected override void OnDeathAnimEnd() {
-    base.OnDeathAnimEnd();
-    entity.SetAnimLocked(false);
-    transform.position = spawnPoint;
-    entity.facing = FacingDirection.LEFT;
-    OnSpawnAnimBegin();
   }
 
   void FlashSprite() {

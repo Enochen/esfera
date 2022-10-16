@@ -11,6 +11,8 @@
                 </ui:GroupBox>
             </ui:GroupBox>
         </ui:VisualElement>
-        <ui:VisualElement name="exp-bar" style="height: 1%;" />
+        <ui:VisualElement name="exp" style="height: auto; padding-bottom: 0; margin-bottom: 0;">
+            <ui:ProgressBar name="exp-bar" title="0/0" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: center;" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

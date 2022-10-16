@@ -2,12 +2,14 @@ using UnityEngine;
 
 public abstract class Skill {
   public SkillMeta meta;
+  public GameObject source;
   public int cooldown;
   float lastUse = float.MinValue;
   bool initialized;
 
-  public Skill(SkillMeta meta, int cooldown = 0) {
+  public Skill(SkillMeta meta, GameObject source, int cooldown = 0) {
     this.meta = meta;
+    this.source = source;
     this.cooldown = cooldown;
   }
 
@@ -39,5 +41,4 @@ public struct SkillMeta {
   public InputButton input;
   public string animTag;
   public AttackState state;
-  public GameObject source;
 }

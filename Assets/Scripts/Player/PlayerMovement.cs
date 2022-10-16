@@ -101,12 +101,8 @@ public class PlayerMovement : EntityMovement {
       if (State == MoveState.CLIMBING) {
         velX = 0;
         velY = 0;
-        if (input.up.isPressed) {
-          velY = 3;
-        }
-        if (input.down.isPressed) {
-          velY = -3;
-        }
+        if (input.up.isPressed) velY = 3;
+        if (input.down.isPressed) velY = -3;
       }
     } else {
       if (State == MoveState.CLIMBING) {
@@ -130,7 +126,7 @@ public class PlayerMovement : EntityMovement {
         return (velX + jumpBoosts.basic.x * entity.facing.X(), jumpBoosts.basic.y);
       case MoveState.CROUCHING when pressedThisFrame && !TouchingFloor:
         DisableCollision(currPlatform);
-        Util.ExecuteAfterTime(() => EnableCollision(currPlatform), 500);
+       _ = Util.ExecuteAfterTime(() => EnableCollision(currPlatform), 500);
         return (jumpBoosts.crouch.x * entity.facing.X(), jumpBoosts.crouch.y);
       case MoveState.AIRBORNE when pressedThisFrame:
         State = MoveState.FLASH_JUMP;
@@ -142,7 +138,8 @@ public class PlayerMovement : EntityMovement {
           return (newX, jumpBoosts.up.y);
         } else {
           effects.TriggerFlashJump();
-          return (jumpBoosts.flash.x * entity.facing.X(), jumpBoosts.flash.y);
+          return (jumpBoosts.flash.x * entity.facing.X(),
+                  Math.Clamp(velY * 2f, jumpBoosts.flash.y / 2f, jumpBoosts.flash.y));
         }
       case MoveState.CLIMBING when pressedThisFrame:
         State = MoveState.AIRBORNE;
@@ -154,7 +151,7 @@ public class PlayerMovement : EntityMovement {
 
   private void StartClimbing() {
     DisableCollision(currPlatform);
-    Util.ExecuteAfterTime(() => EnableCollision(currPlatform), 500);
+   _ = Util.ExecuteAfterTime(() => EnableCollision(currPlatform), 500);
     SetClimbingPosition(currLadder.bounds);
     originalGravity = rb.gravityScale;
     rb.gravityScale = 0;
@@ -163,7 +160,7 @@ public class PlayerMovement : EntityMovement {
   private void StopClimbing() {
     rb.gravityScale = originalGravity;
     climbCooldown = true;
-    Util.ExecuteAfterTime(() => climbCooldown = false, 500);
+   _ = Util.ExecuteAfterTime(() => climbCooldown = false, 500);
   }
 
   public void ResetAirborneVelX() {

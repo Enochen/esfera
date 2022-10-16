@@ -393,6 +393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb6516376e1b07546801e8c4ea24c85e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entity: {fileID: 0}
   hpSlider: {fileID: 6245778573747844589}
   damagedSlider: {fileID: 6245778573369830489}
 --- !u!1 &6245778573221044332
@@ -410,6 +411,7 @@ GameObject:
   - component: {fileID: 6245778573221044340}
   - component: {fileID: 6245778573221044339}
   - component: {fileID: 6245778573221044343}
+  - component: {fileID: 8432406243368977948}
   - component: {fileID: 6245778573221044341}
   - component: {fileID: 6245778573221044338}
   m_Layer: 9
@@ -520,7 +522,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d63202d608993a478885b0a50207319, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDead: 0
+  facing: 1
+  hitstunned: 0
+  expAmount: 0
 --- !u!114 &6245778573221044340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -533,6 +537,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fec9278794e4080459f0373dde436b81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _state: 0
   moveSpeed: 1
 --- !u!114 &6245778573221044339
 MonoBehaviour:
@@ -561,16 +566,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9ceebd3c0ed79e4ca3c00544e05a50e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchDamage: 0
-  hitstunLength: 600
+  hitSound: {fileID: 0}
   stance: 0
-  touchForce: {x: 0, y: 0}
-  playerMask:
-    serializedVersion: 2
-    m_Bits: 256
-  knockbackImmunity: 1
-  channeling: 0
-  hitstunned: 0
+  hitstunLength: 600
+--- !u!114 &8432406243368977948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6245778573221044332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3997a515369269438d8e0ad0b451e2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   initWithSpawnAnim: 1
 --- !u!50 &6245778573221044341
 Rigidbody2D:

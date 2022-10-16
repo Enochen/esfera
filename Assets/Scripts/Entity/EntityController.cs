@@ -3,11 +3,12 @@ using UnityEngine;
 public class EntityController : MonoBehaviour {
   public FacingDirection facing = FacingDirection.RIGHT;
   public bool hitstunned = false;
-  public bool isDead = false;
   protected Animator animator;
-  public bool CannotMove => hitstunned || AnimLocked || isDead;
+  protected HPController hp;
+  public bool CannotMove => hitstunned || AnimLocked || hp.IsDead;
   protected virtual void Start() {
     animator = GetComponent<Animator>();
+    hp = GetComponent<HPController>();
   }
   public bool AnimLocked { get; private set; }
 
@@ -17,6 +18,6 @@ public class EntityController : MonoBehaviour {
     }
     AnimLocked = value;
   }
-
-  public enum FacingDirection { LEFT, RIGHT }
 }
+
+public enum FacingDirection { LEFT, RIGHT }

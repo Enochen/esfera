@@ -26,6 +26,7 @@
     padding-left: 0;
     padding-right: 0;
     margin: 0 0 10px 0;
+    margin-bottom: 10px;
 }
 
 #level-box {
@@ -67,6 +68,27 @@
 }
 
 #hp-bar .unity-progress-bar__title {
+    font-size: 20px;
+    color: rgb(255, 255, 255);
+    -unity-font-definition: none;
+    -unity-font: url('project://database/Assets/Fonts/OpenSansPX.ttf?fileID=12800000&guid=4400d69110902004cbccf672e60e9dfe&type=3#OpenSansPX');
+}
+
+#exp-bar {
+    height: 10px;
+}
+
+#exp-bar .unity-progress-bar__background {
+    height: 10px;
+    background-color: rgb(67, 67, 67);
+}
+
+#exp-bar .unity-progress-bar__progress {
+    height: 10px;
+    background-color: rgb(0, 215, 21);
+}
+
+#exp-bar .unity-progress-bar__title {
     font-size: 20px;
     color: rgb(255, 255, 255);
     -unity-font-definition: none;

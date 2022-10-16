@@ -18,7 +18,7 @@ public class FloatingHPBar : MonoBehaviour {
     var percentage = (float)hpController.HP / hpController.MaxHP;
     hpSlider.value = Math.Max(0, percentage);
     if (hpSlider.value != damagedSlider.value) {
-      Util.ExecuteAfterTime(() => damagedSlider.value = Math.Max(0, percentage), 1000);
+     _ = Util.ExecuteAfterTime(() => damagedSlider.value = Math.Max(0, percentage), 1000);
     }
   }
 }

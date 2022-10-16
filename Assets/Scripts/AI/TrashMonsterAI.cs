@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class TrashMonsterAI : MonsterAI {
@@ -9,11 +8,7 @@ public class TrashMonsterAI : MonsterAI {
     monsterCollider = GetComponent<Collider2D>();
     playerCollider = player.GetComponent<Collider2D>();
   }
-
-  protected override void Update() {
-    base.Update();
-  }
   protected override bool ShouldAttack() {
-    return base.ShouldAttack() || monsterCollider.IsTouching(playerCollider);
+    return base.ShouldAttack() && monsterCollider.IsTouching(playerCollider);
   }
 }
