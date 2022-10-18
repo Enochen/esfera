@@ -9,13 +9,22 @@ public class BuffSelectMenu : MonoBehaviour {
   public Button confirmButton;
 
   public void Start() {
-    confirmButton.interactable = false;
     foreach (var card in buffCards) {
-      card.GetComponent<BuffCard>().onSelect.AddListener((eventData) => {
-        selected = eventData.selectedObject;
-        confirmButton.interactable = true;
+      var toggle = card.GetComponent<Toggle>();
+      toggle.onValueChanged.AddListener((value) => {
+        if (value) {
+          selected = card;
+          confirmButton.interactable = true;
+        } else {
+          selected = null;
+          confirmButton.interactable = false;
+        }
       });
     }
+  }
+
+  void OnEnable() {
+    confirmButton.interactable = false;
   }
 
   public void SetCards(IEnumerable<Buff> buffs) {

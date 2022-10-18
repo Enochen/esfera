@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class MonsterSkills : EntitySkills {
   protected override void Start() {
     base.Start();

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using static EntityController;
 
 public class MonsterMovement : EntityMovement {
   public event Action MovementEvent;

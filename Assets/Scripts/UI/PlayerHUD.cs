@@ -21,7 +21,7 @@ public class PlayerHUD : MonoBehaviour {
     hpBar = GetComponent<UIDocument>().rootVisualElement.Q<ProgressBar>("hp-bar");
     hp.HPChangeEvent += UpdateHP;
     UpdateHP();
-    
+
     expBar = GetComponent<UIDocument>().rootVisualElement.Q<ProgressBar>("exp-bar");
     exp.EXPChangeEvent += UpdateEXP;
     UpdateEXP();
@@ -50,6 +50,6 @@ public class PlayerHUD : MonoBehaviour {
     var maxEXP = exp.EXPToNextLevel;
     expBar.value = currentEXP;
     expBar.highValue = maxEXP;
-    expBar.title = $"EXP: {(float)(currentEXP / maxEXP):0.00}";
+    expBar.title = $"EXP: {(float)currentEXP / maxEXP:0.00%}";
   }
 }

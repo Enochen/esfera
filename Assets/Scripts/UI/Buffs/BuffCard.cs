@@ -1,25 +1,18 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class BuffCard : MonoBehaviour, ISelectHandler {
+public class BuffCard : MonoBehaviour {
   public TextMeshProUGUI nameText;
   public Image buffIcon;
   public TextMeshProUGUI descText;
-  public bool isSelected;
-  public UnityEvent<BaseEventData> onSelect;
   [SerializeField] private Buff buff;
 
   public Buff Buff { get => buff; }
 
-  public void OnEnable() {
+  void OnEnable() {
+    GetComponent<Toggle>().isOn = false;
     SetBuff(buff);
-  }
-  
-  public void OnSelect(BaseEventData eventData) {
-    onSelect?.Invoke(eventData);
   }
 
   public void SetBuff(Buff buff) {

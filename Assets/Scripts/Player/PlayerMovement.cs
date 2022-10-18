@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using static EntityController;
 
 public class PlayerMovement : EntityMovement {
   [Serializable]
@@ -95,9 +94,13 @@ public class PlayerMovement : EntityMovement {
     }
 
     if (currLadder != null) {
-      if (!climbCooldown && (input.up.isPressed || input.down.isPressed)) {
-        State = MoveState.CLIMBING;
+      if (!climbCooldown) {
+        if ((input.up.isPressed && currLadder.bounds.max.y > transform.position.y)
+          || (input.down.isPressed && currLadder.bounds.min.y < transform.position.y)) {
+          State = MoveState.CLIMBING;
+        }
       }
+
       if (State == MoveState.CLIMBING) {
         velX = 0;
         velY = 0;
@@ -124,26 +127,33 @@ public class PlayerMovement : EntityMovement {
       case MoveState.STANDING:
         effects.TriggerDust();
         return (velX + jumpBoosts.basic.x * entity.facing.X(), jumpBoosts.basic.y);
+
       case MoveState.CROUCHING when pressedThisFrame && !TouchingFloor:
         DisableCollision(currPlatform);
-       _ = Util.ExecuteAfterTime(() => EnableCollision(currPlatform), 500);
+        _ = Util.ExecuteAfterTime(() => EnableCollision(currPlatform), 500);
         return (jumpBoosts.crouch.x * entity.facing.X(), jumpBoosts.crouch.y);
+
       case MoveState.AIRBORNE when pressedThisFrame:
         State = MoveState.FLASH_JUMP;
         if (input.up.isPressed) {
           effects.TriggerUpJump();
-          var newX = input.moveX != 0
+          var upJumpX = input.moveX != 0
                   ? jumpBoosts.up.x * entity.facing.X()
                   : velX;
-          return (newX, jumpBoosts.up.y);
+          return (upJumpX, jumpBoosts.up.y);
         } else {
           effects.TriggerFlashJump();
           return (jumpBoosts.flash.x * entity.facing.X(),
                   Math.Clamp(velY * 2f, jumpBoosts.flash.y / 2f, jumpBoosts.flash.y));
         }
+
       case MoveState.CLIMBING when pressedThisFrame:
         State = MoveState.AIRBORNE;
-        return (jumpBoosts.climb.x * entity.facing.X(), jumpBoosts.climb.y);
+        var climbJumpX = input.moveX != 0
+                ? jumpBoosts.climb.x * entity.facing.X()
+                : 0;
+        return (climbJumpX, jumpBoosts.climb.y);
+
       default:
         return (velX, velY);
     }
@@ -151,7 +161,7 @@ public class PlayerMovement : EntityMovement {
 
   private void StartClimbing() {
     DisableCollision(currPlatform);
-   _ = Util.ExecuteAfterTime(() => EnableCollision(currPlatform), 500);
+    _ = Util.ExecuteAfterTime(() => EnableCollision(currPlatform), 500);
     SetClimbingPosition(currLadder.bounds);
     originalGravity = rb.gravityScale;
     rb.gravityScale = 0;
@@ -160,7 +170,7 @@ public class PlayerMovement : EntityMovement {
   private void StopClimbing() {
     rb.gravityScale = originalGravity;
     climbCooldown = true;
-   _ = Util.ExecuteAfterTime(() => climbCooldown = false, 500);
+    _ = Util.ExecuteAfterTime(() => climbCooldown = false, 500);
   }
 
   public void ResetAirborneVelX() {

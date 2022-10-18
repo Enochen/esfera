@@ -51,7 +51,11 @@ public abstract class Director : MonoBehaviour {
     var spawnPosition = GetRandomGroundSpawnPosition();
     spawnPosition.y += 1;
     var spawned = Spawn(spawnPosition);
-    if (credits >= selectedCard.EliteCost) {
+
+    if (credits >= selectedCard.LegendaryCost) {
+      MakeLegendary(spawned);
+      credits -= selectedCard.LegendaryCost;
+    } else if (credits >= selectedCard.EliteCost) {
       MakeElite(spawned);
       credits -= selectedCard.EliteCost;
     } else {
@@ -74,8 +78,18 @@ public abstract class Director : MonoBehaviour {
     entity.transform.localScale = new(1.5f, 1.5f);
     entity.GetComponent<HPController>().MaxHP *= 6;
     entity.GetComponent<HPController>().HP *= 6;
+    entity.GetComponent<MonsterCombat>().baseAP *= 2;
     entity.GetComponent<MonsterController>().expAmount *= 3;
     entity.GetComponent<EntityMovement>().moveSpeed /= 1.5f;
+  }
+
+  protected virtual void MakeLegendary(GameObject entity) {
+    entity.transform.localScale = new(4f, 4f);
+    entity.GetComponent<HPController>().MaxHP *= 25;
+    entity.GetComponent<HPController>().HP *= 25;
+    entity.GetComponent<MonsterCombat>().baseAP *= 8;
+    entity.GetComponent<MonsterController>().expAmount *= 10;
+    entity.GetComponent<EntityMovement>().moveSpeed /= 2f;
   }
 
   protected abstract IEnumerable<Card> GenerateCards();
@@ -137,6 +151,7 @@ public abstract class Director : MonoBehaviour {
     public int baseCost;
     public int CommonCost => baseCost;
     public int EliteCost => baseCost * 4;
+    public int LegendaryCost => baseCost * 50;
   }
 
   public enum MonsterRarity {

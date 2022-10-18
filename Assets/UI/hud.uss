@@ -74,7 +74,7 @@
     -unity-font: url('project://database/Assets/Fonts/OpenSansPX.ttf?fileID=12800000&guid=4400d69110902004cbccf672e60e9dfe&type=3#OpenSansPX');
 }
 
-#exp-bar {
+#exp-bar .unity-progress-bar__container {
     height: 10px;
 }
 
